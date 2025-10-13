@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Icone Home Decor — Premium</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --accent:#C7A042; --accent-dark:#A67C2A; --muted:#6f6254; --bg:#fff7ec; --card:#ffffff;
+      --radius:16px; --max-width:1100px; --btn-h:44px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,Arial;background:var(--bg);color:#2e2b25;padding:28px;display:flex;justify-content:center;}
+    .site{max-width:var(--max-width);width:100%}
+
+    /* HERO */
+    .hero{background:linear-gradient(180deg,#fdf8f3,#fff);padding:36px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.06);text-align:center;overflow:hidden}
+    .brand{font-size:40px;font-weight:900;color:var(--accent);font-family:'Cairo',serif;margin:0}
+    .sub{font-size:16px;color:var(--muted);margin:8px 0}
+    .arabic{font-family:'Cairo',sans-serif;font-size:22px;color:var(--accent-dark);margin:10px 0;direction:rtl}
+    .lead{color:#6b5e4f;margin:12px 0 18px}
+    .premium-button{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:10px 22px;border-radius:999px;text-decoration:none;font-weight:800;font-size:15px;color:#fff;background:linear-gradient(90deg,#C7A042,#FFD966,#C7A042);box-shadow:0 8px 28px rgba(199,160,66,0.25);height:var(--btn-h);line-height:1}
+    .premium-button img{width:20px;height:20px}
+    .premium-button:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 18px 40px rgba(199,160,66,0.32);}
+
+    /* PRODUCTS */
+    .products{display:grid;grid-template-columns:1fr;gap:18px;margin:28px 0}
+    .product{display:flex;flex-direction:column;background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,0.05);opacity:0;transform:translateY(12px);transition:all .6s ease}
+    .product.in-view{opacity:1;transform:translateY(0)}
+    .prod-media{background:#fff;padding:14px;display:flex;align-items:center;justify-content:center;height:300px;position:relative;overflow:hidden;border-radius:8px}
+    .prod-media img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;transition:transform .28s ease}
+    .prod-media .zoom-tip{position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,0.6);color:#fff;padding:6px 10px;border-radius:12px;font-size:13px}
+    .prod-media:hover img{transform:scale(1.12)}
+    .info{padding:18px}
+    .title{font-weight:800;font-size:18px;color:#3f3224}
+    .desc{color:var(--muted);margin-top:8px;line-height:1.5}
+    .price-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px}
+    .price{background:#fff7e6;border-left:4px solid var(--accent);padding:8px 12px;border-radius:8px;font-weight:800;color:var(--accent-dark)}
+    .badge{background:#f2f2f2;padding:6px 10px;border-radius:18px;font-size:13px;color:#6a5b48}
+    .prod-actions{display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap}
+    .product-btn{min-width:170px}
+
+    /* swatches */
+    .swatches{display:flex;gap:8px;align-items:center}
+    .swatch{width:22px;height:22px;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.12);cursor:pointer;border:2px solid rgba(255,255,255,0.6);padding:0}
+    .swatch[data-color="gold"]{background:linear-gradient(90deg,#C7A042,#FFD966)}
+    .swatch[data-color="blue"]{background:linear-gradient(90deg,#4A90E2,#70B8FF)}
+    .swatch[data-color="rose"]{background:linear-gradient(90deg,#FF6B8A,#FF9FB1)}
+    .swatch[data-color="green"]{background:linear-gradient(90deg,#27AE60,#7CE4A7)}
+    .swatch[data-color="purple"]{background:linear-gradient(90deg,#8E44AD,#CDA0F7)}
+    .swatch[data-color="red"]{background:linear-gradient(90deg,#E74C3C,#FF8A82)}
+    .swatch[data-color="silver"]{background:linear-gradient(90deg,#BFC9D9,#E6EDF8)}
+
+    /* Reviews */
+    .reviews-wrap{margin:22px 0;opacity:0;transform:translateY(12px);transition:all .6s ease}
+    .reviews-wrap.in-view{opacity:1;transform:translateY(0)}
+    .review-ticker{position:relative;height:170px;overflow:hidden;border-radius:12px;background:linear-gradient(180deg,#fff,#fff);padding:12px;box-shadow:0 8px 30px rgba(0,0,0,0.04)}
+    .review-item{position:absolute;width:calc(100% - 24px);opacity:0;transform:translateY(12px);transition:all 0.6s cubic-bezier(.2,.9,.2,1);direction:rtl;text-align:right}
+    .review-item.active{opacity:1;transform:translateY(0)}
+    .review-meta{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .stars{color:#F2C94C;font-weight:900}
+    .rev-text{color:var(--muted);margin-top:8px;line-height:1.45}
+
+    /* Why choose us */
+    .why{margin:36px 0}
+    .why h2{color:var(--accent-dark);font-size:22px;margin-bottom:12px;text-align:center}
+    .why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+    .why-card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.04);transition:all .3s}
+    .why-card:hover{transform:translateY(-6px);box-shadow:0 14px 40px rgba(199,160,66,0.16)}
+    .why-ico{font-size:28px;margin-bottom:8px}
+    .why-title{font-weight:800;margin-bottom:6px}
+    .why-desc{color:var(--muted)}
+
+    /* Contact */
+    .contact{margin:34px 0;background:linear-gradient(90deg,#fffdf5,#fff);padding:22px;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,0.04);display:flex;gap:18px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+    .contact .left{flex:1;min-width:220px}
+    .contact .right{min-width:240px}
+    .contact .btns{display:flex;gap:12px;flex-wrap:wrap}
+    .social-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;text-decoration:none;font-weight:800;color:#fff}
+    .insta{background:linear-gradient(90deg,#E1306C,#F77737)}
+    .wa{background:linear-gradient(90deg,#25D366,#1DA851)}
+
+    /* Floating WhatsApp */
+    .floating-wa{position:fixed;right:18px;bottom:18px;z-index:9999;display:flex;flex-direction:column;gap:10px}
+    .floating-wa a{display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;box-shadow:0 10px 30px rgba(0,0,0,0.15);text-decoration:none;color:#fff;background:linear-gradient(90deg,#25D366,#1DA851);font-size:22px}
+    .floating-wa a[aria-label]{padding:0}
+
+    /* Chat panel (live support) */
+    .chat-panel{position:fixed;right:18px;bottom:90px;z-index:9999;width:320px;max-width:92vw;background:var(--card);border-radius:14px;box-shadow:0 18px 60px rgba(0,0,0,0.18);overflow:hidden;display:none;flex-direction:column}
+    .chat-header{background:linear-gradient(90deg,var(--accent),var(--accent-dark));color:#fff;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .chat-body{padding:12px;height:300px;overflow:auto;background:#fffdf9}
+    .chat-input{display:flex;gap:8px;padding:12px;border-top:1px solid #eee}
+    .chat-input input{flex:1;padding:8px;border-radius:10px;border:1px solid #e6dfd1}
+    .chat-input button{padding:8px 12px;border-radius:10px;background:var(--accent);color:#fff;border:none;font-weight:800}
+
+    /* Payment modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:2000}
+    .modal{width:520px;max-width:94vw;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.3)}
+    .modal .modal-header{padding:14px 16px;background:#fffdf5;display:flex;align-items:center;justify-content:space-between}
+    .modal .modal-body{padding:16px}
+
+    /* Lightbox */
+    .lightbox{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.85);z-index:1500}
+    .lightbox img{max-width:92vw;max-height:86vh;border-radius:8px}
+    .lightbox .nav{position:absolute;top:50%;transform:translateY(-50%);font-size:34px;color:#fff;padding:12px;cursor:pointer;user-select:none}
+    .lightbox .prev{left:18px} .lightbox .next{right:18px}
+    .lightbox .close{position:absolute;top:18px;right:18px;font-size:26px;color:#fff;cursor:pointer}
+
+    footer{text-align:center;color:var(--muted);margin-top:26px;font-size:13px}
+    footer a{color:var(--accent-dark);text-decoration:none;font-weight:700}
+    .fade-in{opacity:0;transform:translateY(14px);transition:all .6s ease}
+    .fade-in.in-view{opacity:1;transform:translateY(0)}
+
+    @media(min-width:900px){ .products{grid-template-columns:repeat(2,1fr)} .prod-media{height:320px} }
+    @media(max-width:900px){ .prod-media{height:240px} .premium-button{min-width:150px} .floating-wa{right:12px;bottom:12px} .chat-panel{right:12px;width:92vw}}
+  </style>
+</head>
+<body>
+  <div class="site">
+
+    <!-- HERO -->
+    <section class="hero fade-in" id="hero">
+      <h1 class="brand">Icone Home Decor</h1>
+      <p class="sub">Experience Luxury, Comfort & Arabic Elegance in Every Corner</p>
+      <p class="arabic">اختبر الفخامة والراحة والأناقة العربية في كل زاوية</p>
+      <p class="lead">Transform your home into a space of beauty and elegance.<br>حوّل منزلك إلى مساحة من الجمال والأناقة.</p>
+      <a href="https://wa.me/message/OFI7ETDUG3KUP1" target="_blank" class="premium-button"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA"> 🛍️ Shop Now | تسوق الآن</a>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section class="products fade-in" id="products">
+
+      <!-- Product 1 -->
+      <article class="product" data-prod-index="0">
+        <div class="prod-media">
+          <img src="https://i.postimg.cc/8kKgkXgG/IMG-20251011-075043-374.jpg" alt="Luxury Curtains" data-src-large="https://i.postimg.cc/8kKgkXgG/IMG-20251011-075043-374.jpg">
+          <div class="zoom-tip">Hover to zoom • اضغط للتكبير</div>
+        </div>
+        <div class="info">
+          <div class="title">Luxury Curtains — ستائر فاخرة</div>
+          <div class="desc">Soft gold tones with elegant folds and smart control options. ستائر بلون ذهبي ناعم وطيات أنيقة مع خيارات تحكم ذكية.</div>
+          <div class="price-row">
+            <div class="price">1000 SAR / 2 meters</div>
+            <div class="badge">Bestseller • الأكثر مبيعاً</div>
+          </div>
+
+          <div class="prod-actions">
+            <a class="premium-button product-btn" data-product="p1" href="#" role="button" aria-haspopup="dialog">🛒 Buy / Checkout</a>
+
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="font-size:13px;color:var(--muted)">Change color • غيّر اللون</div>
+              <div class="swatches" data-target="p1" aria-hidden="false">
+                <button class="swatch" data-color="gold" title="Gold" aria-label="Gold"></button>
+                <button class="swatch" data-color="blue" title="Blue" aria-label="Blue"></button>
+                <button class="swatch" data-color="rose" title="Rose" aria-label="Rose"></button>
+                <button class="swatch" data-color="green" title="Green" aria-label="Green"></button>
+                <button class="swatch" data-color="purple" title="Purple" aria-label="Purple"></button>
+                <button class="swatch" data-color="red" title="Red" aria-label="Red"></button>
+                <button class="swatch" data-color="silver" title="Silver" aria-label="Silver"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 2 -->
+      <article class="product" data-prod-index="1">
+        <div class="prod-media">
+          <img src="https://i.postimg.cc/qqYFsYpw/b026e4683eac3a8a199173e420dec768.jpg" alt="Icone Sofa" data-src-large="https://i.postimg.cc/qqYFsYpw/b026e4683eac3a8a199173e420dec768.jpg">
+          <div class="zoom-tip">Hover to zoom • اضغط للتكبير</div>
+        </div>
+        <div class="info">
+          <div class="title">Icone Sofa — صوفا أنيقة</div>
+          <div class="desc">Beige luxury sofa with deep cushions that embrace you. صوفا بلون بيج مع وسائد عميقة تمنحك احتضانًا مريحًا.</div>
+          <div class="price-row">
+            <div class="price">1200 SAR / meter</div>
+            <div class="badge">Limited Stock • الكمية محدودة</div>
+          </div>
+
+          <div class="prod-actions">
+            <a class="premium-button product-btn" data-product="p2" href="#" role="button" aria-haspopup="dialog">🛒 Buy / Checkout</a>
+
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="font-size:13px;color:var(--muted)">Change color • غيّر اللون</div>
+              <div class="swatches" data-target="p2">
+                <button class="swatch" data-color="gold" title="Gold" aria-label="Gold"></button>
+                <button class="swatch" data-color="blue" title="Blue" aria-label="Blue"></button>
+                <button class="swatch" data-color="rose" title="Rose" aria-label="Rose"></button>
+                <button class="swatch" data-color="green" title="Green" aria-label="Green"></button>
+                <button class="swatch" data-color="purple" title="Purple" aria-label="Purple"></button>
+                <button class="swatch" data-color="red" title="Red" aria-label="Red"></button>
+                <button class="swatch" data-color="silver" title="Silver" aria-label="Silver"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 3 -->
+      <article class="product" data-prod-index="2">
+        <div class="prod-media">
+          <img src="https://i.postimg.cc/vmSM2GLc/IMG-20250930-004547-584.jpg" alt="Sheer Curtains" data-src-large="https://i.postimg.cc/vmSM2GLc/IMG-20250930-004547-584.jpg">
+          <div class="zoom-tip">Hover to zoom • اضغط للتكبير</div>
+        </div>
+        <div class="info">
+          <div class="title">Sheer Curtains — ستائر شفافة</div>
+          <div class="desc">Soft translucent fabrics that let warm natural light in. ستائر شفافة تسمح بدخول ضوء طبيعي دافئ وتضفي سحرًا على المكان.</div>
+          <div class="price-row">
+            <div class="price">999 SAR / 2 meters</div>
+            <div class="badge">Customer Favorite • اختيار العملاء</div>
+          </div>
+
+          <div class="prod-actions">
+            <a class="premium-button product-btn" data-product="p3" href="#" role="button" aria-haspopup="dialog">🛒 Buy / Checkout</a>
+
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="font-size:13px;color:var(--muted)">Change color • غيّر اللون</div>
+              <div class="swatches" data-target="p3">
+                <button class="swatch" data-color="gold" title="Gold" aria-label="Gold"></button>
+                <button class="swatch" data-color="blue" title="Blue" aria-label="Blue"></button>
+                <button class="swatch" data-color="rose" title="Rose" aria-label="Rose"></button>
+                <button class="swatch" data-color="green" title="Green" aria-label="Green"></button>
+                <button class="swatch" data-color="purple" title="Purple" aria-label="Purple"></button>
+                <button class="swatch" data-color="red" title="Red" aria-label="Red"></button>
+                <button class="swatch" data-color="silver" title="Silver" aria-label="Silver"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- REVIEWS -->
+    <section class="reviews-wrap" id="reviewsSection">
+      <h2 style="text-align:center;color:var(--accent-dark);margin-bottom:12px">Customer Reviews • آراء العملاء</h2>
+      <div class="review-ticker" id="reviewTicker" aria-live="polite" title="Rotating Arabic customer reviews"></div>
+    </section>
+
+    <!-- WHY CHOOSE US -->
+    <section class="why fade-in" id="why">
+      <h2>🌟 Why Choose Us • لماذا تختارنا</h2>
+      <div class="why-grid">
+        <div class="why-card"><div class="why-ico">🏆</div><div class="why-title">Premium Quality • جودة فاخرة</div><div class="why-desc">أقمشة وخامات عالية الجودة مصممة لتدوم وتبدو رائعة.</div></div>
+        <div class="why-card"><div class="why-ico">🚚</div><div class="why-title">Fast Delivery • توصيل سريع</div><div class="why-desc">خدمة توصيل سريعة وآمنة حتى باب منزلك.</div></div>
+        <div class="why-card"><div class="why-ico">🕌</div><div class="why-title">Arabic Elegance • أناقة عربية</div><div class="why-desc">تصاميم مستوحاة من التراث العربي مع لمسة عصرية.</div></div>
+        <div class="why-card"><div class="why-ico">💬</div><div class="why-title">24/7 Support • دعم متواصل</div><div class="why-desc">فريق دعم متواجد للرد على استفساراتك وتقديم المساعدة.</div></div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact fade-in" id="contact">
+      <div class="left">
+        <h3 style="margin:0;color:var(--accent-dark)">📞 Contact & Location • تواصل معنا</h3>
+        <p style="margin:8px 0;color:var(--muted)">📍 Riyadh, Saudi Arabia — الرياض، المملكة العربية السعودية</p>
+        <p style="margin:0;color:var(--muted)">🕒 Open: Sat–Thu | 9:00 AM – 9:00 PM • مفتوح: السبت–الخميس</p>
+      </div>
+      <div class="right">
+        <div class="btns">
+          <a href="https://wa.me/message/OFI7ETDUG3KUP1" target="_blank" class="social-btn wa"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="" style="width:18px;height:18px"> WhatsApp</a>
+          <a href="https://instagram.com/iconehomedecor" target="_blank" class="social-btn insta">📸 Instagram</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © 2025 Icone Home Decor. All rights reserved. • جميع الحقوق محفوظة<br>
+      <span style="color:var(--accent-dark)">💻 Developed by <a href="https://www.facebook.com/share/14LC6LdaXcG/" target="_blank" rel="noopener">Nisho Alvi</a></span>
+    </footer>
+  </div>
+
+  <!-- Floating WhatsApp -->
+  <div class="floating-wa" aria-hidden="false">
+    <a href="https://wa.me/message/OFI7ETDUG3KUP1" target="_blank" aria-label="Open WhatsApp chat">💬</a>
+    <button id="openChatBtn" title="Live Support" style="width:56px;height:56px;border-radius:50%;border:none;background:linear-gradient(90deg,#C7A042,#FFD966);font-weight:900;box-shadow:0 10px 30px rgba(0,0,0,0.15);cursor:pointer">💬</button>
+  </div>
+
+  <!-- Chat Panel (Live support) -->
+  <div class="chat-panel" id="chatPanel" role="dialog" aria-label="Live Support Chat">
+    <div class="chat-header">
+      <div style="display:flex;gap:10px;align-items:center">
+        <div style="width:44px;height:44;border-radius:10px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-weight:900">IC</div>
+        <div>
+          <div style="font-weight:800">Live Support</div>
+          <div style="font-size:12px">Online • متصل</div>
+        </div>
+      </div>
+      <button id="closeChat" aria-label="Close chat" style="background:transparent;border:none;color:#fff;font-size:20px;cursor:pointer">×</button>
+    </div>
+    <div class="chat-body" id="chatBody" aria-live="polite">
+      <div style="font-size:13px;color:var(--muted)">مرحبًا! كيف أساعدك اليوم؟ — Send a message or request a quote.</div>
+    </div>
+    <div class="chat-input">
+      <input id="chatInput" placeholder="Write a message... • اكتب رسالتك" aria-label="Type your message">
+      <button id="sendChat">Send</button>
+    </div>
+  </div>
+
+  <!-- Payment Modal -->
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-hidden="true">
+    <div class="modal" role="document" aria-modal="true">
+      <div class="modal-header">
+        <strong>Checkout • إتمام الشراء</strong>
+        <button id="closeModal" style="background:transparent;border:none;font-size:20px;cursor:pointer">×</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- dynamic content -->
+        <p id="selectedProductInfo" style="margin-top:6px;color:var(--muted)"></p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+          <button id="payalrajhi" class="premium-button" style="background:linear-gradient(90deg,#003087,#0070ba)">Pay with alrajhi</button>
+          <button id="paySTC" class="premium-button" style="background:linear-gradient(90deg,#1F7A4C,#25D366)">Pay with STC Pay</button>
+          <button id="payWhatsApp" class="premium-button" style="background:linear-gradient(90deg,#25D366,#1DA851)">Request Invoice via WhatsApp</button>
+          <button id="payCOD" class="premium-button" style="background:linear-gradient(90deg,#6c6c6c,#9a9a9a)">Cash on Delivery</button>
+        </div>
+        <p style="margin-top:12px;color:var(--muted);font-size:13px">Note: For alrajhi replace <code>YOUR_CLIENT_ID</code> below with your alrajhi client id before going live.</p>
+        <div id="alrajhiContainer" style="margin-top:12px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog">
+    <div class="close" id="lbClose" title="Close">✕</div>
+    <div class="nav prev" id="lbPrev" title="Previous">‹</div>
+    <img src="" alt="Product large view" id="lightboxImg">
+    <div class="nav next" id="lbNext" title="Next">›</div>
+  </div>
+
+  <script>
+    /* IntersectionObserver for fade-in sections & product cards */
+    (function(){
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting){
+            e.target.classList.add('in-view');
+            io.unobserve(e.target);
+          }
+        });
+      }, {threshold: 0.12});
+      document.querySelectorAll('.fade-in, .product').forEach(el=> io.observe(el));
+    })();
+
+    /* Color swatches behavior */
+    const swatchMap = {
+      gold: 'linear-gradient(90deg,#C7A042,#FFD966,#C7A042)',
+      blue: 'linear-gradient(90deg,#4A90E2,#70B8FF)',
+      rose: 'linear-gradient(90deg,#FF6B8A,#FF9FB1)',
+      green: 'linear-gradient(90deg,#27AE60,#7CE4A7)',
+      purple: 'linear-gradient(90deg,#8E44AD,#CDA0F7)',
+      red: 'linear-gradient(90deg,#E74C3C,#FF8A82)',
+      silver: 'linear-gradient(90deg,#BFC9D9,#E6EDF8)'
+    };
+    document.querySelectorAll('.swatches').forEach(container=>{
+      container.querySelectorAll('.swatch').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const color = btn.getAttribute('data-color');
+          const gradient = swatchMap[color] || swatchMap.gold;
+          const parent = container.closest('.product');
+          if(!parent) return;
+          const productBtn = parent.querySelector('.product-btn');
+          if(productBtn){
+            productBtn.style.background = gradient;
+            productBtn.style.color = (color === 'silver' ? '#2e2b25' : '#fff');
+          }
+        });
+      });
+    });
+
+    /* Reviews array (same as before) */
+    const reviews = [
+      {name:'فاطمة — جدة',text:'منتجات ذات جودة عالية حقًا. التركيب كان سريعاً وفريق العمل محترف. أنصح بها لكل منزل يبحث عن الفخامة.'},
+      {name:'محمد — الرياض',text:'تجربة شراء ممتازة، الاستلام كان مرتبًا والستائر تبدو أفخم مما توقعت. شكراً للخدمة الرائعة.'},
+      {name:'ليلى — الدمام',text:'الستائر الشفافة أعطت الغرفة إشراقاً ودفئاً. خامة ممتازة وخدمة تركيب مميزة.'},
+      {name:'علي — مكة',text:'الجلوس على الصوفا أصبح مريحًا جداً، خامة متينة وتصميم أنيق. يستحق كل ريال دفعته.'},
+      {name:'سارة — الخبر',text:'خدمة العملاء سريعة ومهذبة، والمنتج وصل مع تغليف ممتاز. تصميم متناسق مع ديكور المنزل.'},
+      {name:'أحمد — جدة',text:'التعامل احترافي والأسعار واضحة، والتركيب تم بسرعة. تجربة شراء آمنة وموثوقة.'},
+      {name:'مها — الرياض',text:'صياغة فنية جميلة وتصميم مستوحى من التراث العربي، أضفى لمسة فاخرة على غرفة الضيوف.'},
+      {name:'خالد — الطائف',text:'الخياطة متقنة والمواد ممتازة. التوصيل كان سريعًا والتركيب دقيقًا، مبسوط جدًا.'},
+      {name:'نورة — المدينة',text:'التنسيق بين الألوان كان مثالياً، الجميع سأل عن مصدر الأثاث. شكراً على الاحتراف.'},
+      {name:'يوسف — الرياض',text:'الصوفا قوية ومريحة، مناسبة للعائلة والأطفال. خامة لا تتلف بسهولة وسهلة التنظيف.'},
+      {name:'هند — جدة',text:'التصميم عملي وأنيق في نفس الوقت. التسليم كان في الموعد المحدد والخدمة ممتازة.'},
+      {name:'رامي — الدمام',text:'الستائر تعمل بهدوء وجودة المحركات تبدو ممتازة. تحكم سهل عبر التطبيق.'},
+      {name:'منى — الخبر',text:'التفاصيل الصغيرة في التصميم مثل الخرز والخياطة تضيف إحساسًا بالفخامة. راضية جدا.'},
+      {name:'سلمان — الرياض',text:'تجربة مريحة من اختيار اللون إلى التوصيل والتركيب. فريق رائع وخدمة بعد البيع ممتازة.'},
+      {name:'هبة — مكة',text:'الجودة تفوق السعر بكثير، والملمس ناعم جداً. أصبح منزلي يبدو أكثر دفئًا وأناقة.'},
+      {name:'طارق — جدة',text:'الاستخدام اليومي لم يؤثر على جودة القماش. منتج عملي وراقي في نفس الوقت.'},
+      {name:'جمانة — الدمام',text:'الخدمة السريعة والاحترافية في التركيب جعلت التجربة ممتعة. أنصح بشراء الستائر الذكية.'},
+      {name:'إبراهيم — المدينة',text:'تغليف ممتاز وحماية كاملة أثناء الشحن. كل شيء وصل بحالة رائعة.'},
+      {name:'لمى — الرياض',text:'الأقمشة تضفي لمسة فنية للغرفة، الألوان ثابتة ولا تتغير مع الزمن. اختيار موفق.'},
+      {name:'فيصل — الخبر',text:'التعامل واضح والموعد دقيق، والنتيجة النهائية فاخرة. أشكر فريق العمل على الجهد.'}
+    ];
+    const ticker = document.getElementById('reviewTicker');
+    reviews.forEach((r, idx) => {
+      const el = document.createElement('div');
+      el.className = 'review-item' + (idx === 0 ? ' active' : '');
+      el.style.top = '10px';
+      el.innerHTML = `<div class="review-meta"><div><strong>${r.name}</strong></div><div class="stars">★★★★★</div></div><div class="rev-text">${r.text}</div>`;
+      ticker.appendChild(el);
+    });
+    let current = 0; let revInterval = null;
+    function showNextReview(){ const items = ticker.querySelectorAll('.review-item'); items[current].classList.remove('active'); current = (current + 1) % items.length; items[current].classList.add('active'); }
+    function startReviews(){ revInterval = setInterval(showNextReview, 3400); }
+    function stopReviews(){ if(revInterval) clearInterval(revInterval); revInterval = null; }
+    ticker.addEventListener('mouseenter', stopReviews);
+    ticker.addEventListener('mouseleave', startReviews);
+    ticker.tabIndex = 0; ticker.addEventListener('focus', stopReviews); ticker.addEventListener('blur', startReviews);
+    document.addEventListener('DOMContentLoaded', ()=> { startReviews(); setTimeout(()=>{ document.querySelectorAll('.product').forEach((p,i)=>{ if(i===0) p.classList.add('in-view'); }); }, 200); });
+
+    document.addEventListener('visibilitychange', ()=> { if(document.hidden) stopReviews(); else startReviews(); });
+
+    // Floating WA pulse
+    (function(){
+      const wa = document.querySelector('.floating-wa a');
+      let pulsing = true;
+      setInterval(()=> { if(!pulsing) return; wa.style.transform = wa.style.transform === 'scale(1.06)' ? 'scale(1)' : 'scale(1.06)'; }, 1800);
+      wa.addEventListener('mouseenter', ()=> pulsing = false);
+      wa.addEventListener('mouseleave', ()=> pulsing = true);
+    })();
+
+    /* LIGHTBOX (click on any product image to open) */
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lbPrev = document.getElementById('lbPrev'), lbNext = document.getElementById('lbNext'), lbClose = document.getElementById('lbClose');
+    const productImgs = Array.from(document.querySelectorAll('.prod-media img'));
+    let lbIndex = 0;
+    productImgs.forEach((img, idx)=>{
+      img.style.cursor = 'zoom-in';
+      img.addEventListener('click', ()=> {
+        lbIndex = idx;
+        openLightbox(idx);
+      });
+    });
+    function openLightbox(idx){
+      const src = productImgs[idx].getAttribute('data-src-large') || productImgs[idx].src;
+      lightboxImg.src = src;
+      lightbox.style.display = 'flex';
+      lightbox.setAttribute('aria-hidden','false');
+    }
+    function closeLightbox(){ lightbox.style.display = 'none'; lightbox.setAttribute('aria-hidden','true'); lightboxImg.src=''; }
+    lbClose.addEventListener('click', closeLightbox);
+    lbPrev.addEventListener('click', ()=> { lbIndex = (lbIndex - 1 + productImgs.length) % productImgs.length; openLightbox(lbIndex); });
+    lbNext.addEventListener('click', ()=> { lbIndex = (lbIndex + 1) % productImgs.length; openLightbox(lbIndex); });
+    lightbox.addEventListener('click', (e)=> { if(e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', (e)=> { if(e.key === 'Escape') closeLightbox(); if(e.key === 'ArrowLeft') lbPrev.click(); if(e.key === 'ArrowRight') lbNext.click(); });
+
+    /* Simple magnifier / lens on mousemove for larger zoom (desktop) */
+    productImgs.forEach(img => {
+      // only for pointer devices—mobile gets tap-to-open (lightbox)
+      let lens = null;
+      img.addEventListener('mousemove', (e)=>{
+        if(window.innerWidth < 700) return;
+        if(!lens){
+          lens = document.createElement('div');
+          lens.style.position = 'absolute';
+          lens.style.border = '3px solid rgba(255,255,255,0.9)';
+          lens.style.width = '120px';
+          lens.style.height = '120px';
+          lens.style.borderRadius = '50%';
+          lens.style.boxShadow = '0 4px 18px rgba(0,0,0,0.25)';
+          lens.style.pointerEvents = 'none';
+          lens.style.backgroundImage = `url(${img.src})`;
+          lens.style.backgroundRepeat = 'no-repeat';
+          lens.style.backgroundSize = (img.width * 2) + 'px ' + (img.height * 2) + 'px';
+          img.parentElement.appendChild(lens);
+        }
+        const rect = img.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const percentX = x / rect.width;
+        const percentY = y / rect.height;
+        lens.style.left = `${x - 60}px`;
+        lens.style.top = `${y - 60}px`;
+        const bgX = -((img.naturalWidth * 2) * percentX - 60);
+        const bgY = -((img.naturalHeight * 2) * percentY - 60);
+        lens.style.backgroundPosition = `${bgX}px ${bgY}px`;
+      });
+      img.addEventListener('mouseleave', ()=> {
+        const existing = img.parentElement.querySelector('div');
+        if(existing) existing.remove();
+      });
+    });
+
+    /* CHAT PANEL (Live Support) - sends typed message to WhatsApp with prefilled text */
+    const openChatBtn = document.getElementById('openChatBtn');
+    const chatPanel = document.getElementById('chatPanel');
+    const closeChat = document.getElementById('closeChat');
+    const sendChat = document.getElementById('sendChat');
+    const chatInput = document.getElementById('chatInput');
+    const chatBody = document.getElementById('chatBody');
+
+    openChatBtn.addEventListener('click', ()=> { chatPanel.style.display='flex'; chatInput.focus(); });
+    closeChat.addEventListener('click', ()=> chatPanel.style.display='none');
+    sendChat.addEventListener('click', sendChatMessage);
+    chatInput.addEventListener('keydown', (e)=> { if(e.key === 'Enter') sendChatMessage(); });
+
+    function sendChatMessage(){
+      const text = chatInput.value.trim();
+      if(!text) return;
+      const bubble = document.createElement('div');
+      bubble.style.background='#e9f8ef'; bubble.style.padding='8px 10px'; bubble.style.borderRadius='10px'; bubble.style.margin='8px 0'; bubble.style.maxWidth='80%';
+      bubble.textContent = text;
+      chatBody.appendChild(bubble);
+      chatBody.scrollTop = chatBody.scrollHeight;
+      // Open WhatsApp with prefilled text to continue on mobile/WhatsApp web
+      const waMsg = encodeURIComponent(`Hello, I want to inquire: ${text}`);
+      // Replace phone with your whatsapp number if needed
+      window.open(`https://wa.me/966XXXXXXXXX?text=${waMsg}`, '_blank');
+      chatInput.value = '';
+    }
+
+    /* PAYMENT modal logic */
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    const closeModal = document.getElementById('closeModal');
+    const payalrajhi = document.getElementById('payalrajhi');
+    const paySTC = document.getElementById('paySTC');
+    const payWhatsApp = document.getElementById('payWhatsApp');
+    const payCOD = document.getElementById('payCOD');
+    const selectedProductInfo = document.getElementById('selectedProductInfo');
+    const alrajhiContainer = document.getElementById('alrajhiContainer');
+
+    // When clicking any Buy button, open modal with product info
+    document.querySelectorAll('.product-btn').forEach((btn, idx) => {
+      btn.addEventListener('click', (e)=>{
+        e.preventDefault();
+        const parent = btn.closest('.product');
+        const title = parent.querySelector('.title').textContent;
+        const price = parent.querySelector('.price').textContent;
+        selectedProductInfo.textContent = `${title} — ${price}`;
+        modalBackdrop.style.display = 'flex';
+        modalBackdrop.setAttribute('aria-hidden','false');
+      });
+    });
+    closeModal.addEventListener('click', ()=> { modalBackdrop.style.display='none'; modalBackdrop.setAttribute('aria-hidden','true'); alrajhiContainer.innerHTML=''; });
+
+    // alrajhi: note - replace YOUR_CLIENT_ID with real client id for production
+    payalrajhi.addEventListener('click', ()=> {
+      alrajhiContainer.innerHTML = `<div id="alrajhi-buttons"></div>`;
+      // load alrajhi script dynamically if not already loaded
+      if(!document.getElementById('alrajhi-sdk')){
+        const s = document.createElement('script');
+    s.id = 'alrajhi-sdk';
+        s.src = 'https://www.alrajhi.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=SAR';
+        s.onload = renderalrajhiButtons;
+        document.body.appendChild(s);
+      } else {
+        renderalrajhiButtons();
+      }
+    });
+
+    function renderalrajhiButtons(){
+      if(!window.alrajhi) {
+        alrajhiContainer.innerHTML = '<p style="color:var(--muted)">alrajhi SDK failed to load. Check your connection or CLIENT_ID.</p>';
+        return;
+      }
+      alrajhi.Buttons({
+        createOrder: function(data, actions) {
+          // For demo: amount hard-coded. In real, pass selected price/amount.
+          return actions.order.create({ purchase_units: [{ amount: { value: '10.00', currency_code: 'SAR' } }]});
+        },
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function(details) {
+            alert('Payment completed. Thank you, ' + details.payer.name.given_name + '!');
+            modalBackdrop.style.display='none';
+            alrajhiContainer.innerHTML='';
+          });
+        },
+        onError: function(err){ console.error(err); alert('Payment error: ' + err); }
+      }).render('#alrajhi-buttons');
+    }
+
+    // STC Pay (example): this is a placeholder link: replace with your STC Pay checkout link
+    paySTC.addEventListener('click', ()=> {
+      alert('You will be redirected to STC Pay (example). Replace link with your STC Pay checkout URL.');
+      window.open('https://stcpay.com/checkout-placeholder', '_blank');
+    });
+
+    // WhatsApp invoice: opens chat with prefilled order
+    payWhatsApp.addEventListener('click', ()=> {
+      const info = selectedProductInfo.textContent || 'Order inquiry';
+      const msg = encodeURIComponent(`Hello, I want to buy: ${info}. Please send invoice and payment link.`);
+      window.open(`https://wa.me/message/OFI7ETDUG3KUP1?text=${msg}`, '_blank');
+    });
+
+    // Cash on Delivery
+    payCOD.addEventListener('click', ()=> {
+      alert('Thank you! Your COD request is received. Our support will contact you via WhatsApp.');
+      modalBackdrop.style.display='none';
+    });
+
+    /* Accessibility: close modal with ESC */
+    document.addEventListener('keydown', (e)=> { if(e.key === 'Escape'){ if(lightbox.style.display === 'flex') closeLightbox(); if(modalBackdrop.style.display === 'flex'){ modalBackdrop.style.display='none'; } } });
+
+    // Reveal sections (additional observer)
+    (function(){
+      const observer = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting) e.target.classList.add('in-view');
+        });
+      }, {threshold:0.12});
+      document.querySelectorAll('.product').forEach(p => observer.observe(p));
+      document.querySelectorAll('#reviewsSection,#why,#contact,#hero,#products').forEach(s => observer.observe(s));
+    })();
+  </script>
+</body>
+  </html>
